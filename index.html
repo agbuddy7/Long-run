@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Dino Game</title>
+    <title>Long-Run</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,50 @@
             <span id="score">Score: 0</span>
             <span id="high-score">High: 0</span>
         </div>
-        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div class="main-game">
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
+            <div class="side-instructions">
+                <h3>🎮 Game Controls</h3>
+                <div class="control-item">
+                    <span class="key">SPACE</span> or <span class="key">↑</span>
+                    <span class="action">Jump over gaps</span>
+                </div>
+                <div class="control-item">
+                    <span class="key">↓</span>
+                    <span class="action">Duck under beams</span>
+                </div>
+                
+                <h3>🎯 Obstacles</h3>
+                <div class="obstacle-item">
+                    <span class="obstacle-icon">🏢</span>
+                    <span class="obstacle-desc">Jump between buildings(Bad landings and jumps make you lose speed)</span>
+                </div>
+                <div class="obstacle-item">
+                    <span class="obstacle-icon">⚡</span>
+                    <span class="obstacle-desc">Duck under traction beams</span>
+                </div>
+                <div class="obstacle-item">
+                    <span class="obstacle-icon">👻</span>
+                    <span class="obstacle-desc">Avoid Pacman chaser</span>
+                </div>
+                
+                <h3>📈 Tips</h3>
+                <ul class="tips-list">
+                    <li>Small gaps will be jumped automatically</li>
+                    <li>Uneven buildings will be traversed automatically</li>
+                    <li>In big gaps even jumping on  till the building walls teleports you to rooftop</li>
+                    <li>Pacman cycles and gets faster</li>
+                </ul>
+                
+                <h3>🏆 Scoring</h3>
+                <div class="score-item">
+                    <span class="points">+20</span> Building survived
+                </div>
+                <div class="score-item">
+                    <span class="points">+50</span> Gap jumped
+                </div>
+            </div>
+        </div>
         <div class="game-over" id="gameOver" style="display: none;">
             <h2>Game Over!</h2>
             <p>Score: <span id="finalScore">0</span></p>
