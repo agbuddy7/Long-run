@@ -133,7 +133,7 @@ class DinoGame {
         const beamWidth = 20 + Math.random() * 30; // Random beam width
         const beamX = buildingX + (buildingWidth - beamWidth) / 2; // Center on building
         const beamBottom = this.canvas.height - buildingHeight;
-        const beamHeight = 80 + Math.random() * 40; // Height of the beam
+        const beamHeight = this.canvas.height; // Height of the beam
         
         this.tractionBeams.push({
             x: beamX,
@@ -190,6 +190,7 @@ class DinoGame {
         // Reset dino position
         this.dino.y = 120;
         this.dino.dy = 0;
+        this.dino.x = 350;
         this.dino.grounded = false;
         this.dino.ducking = false;
         this.dino.height = this.dino.normalHeight;
