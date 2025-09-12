@@ -355,7 +355,7 @@ class DinoGame {
                     this.dino.y + this.dino.height > building.y &&
                     this.dino.y < building.y + building.height &&
                     !this.dino.grounded) {
-                    this.gameSpeed = 2;
+                    this.gameSpeed = 4;
                     if(this.dino.y + this.dino.height <  building.y + 10) {
                          this.gameSpeed += 0.00;
                     }
