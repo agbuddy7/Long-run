@@ -550,7 +550,7 @@ class DinoGame {
             this.ctx.fillStyle = '#fff';
             this.ctx.font = 'bold 24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('Rooftop Runner', this.canvas.width / 2, 60);
+            this.ctx.fillText('Long run', this.canvas.width / 2, 60);
             this.ctx.font = '16px Arial';
             this.ctx.fillText('Jump gaps, duck beams, avoid Pacman!', this.canvas.width / 2, 85);
             this.ctx.fillText('Press SPACE to start', this.canvas.width / 2, 105);
