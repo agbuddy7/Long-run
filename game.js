@@ -30,15 +30,15 @@ class DinoGame {
             currentBuilding: null
         };
         
-        // Pacman chaser
+    
         this.pacman = {
-            x: -120, // Start mostly off-screen
+            x: -120, 
             y: this.canvas.height / 2,
             size: 80,
-            speed: 4, // Same initial speed as game
-            mouthPhase: 0, // For mouth animation
+            speed: 1, 
+            mouthPhase: 0, 
             isActive: true,
-            cycleCount: 0 // Track how many times it has cycled
+            cycleCount: 0 
         };
         
         // Buildings array
@@ -71,15 +71,23 @@ class DinoGame {
         }
     }
     
-    // Calculate maximum jumpable gap based on current game speed
+
     getMaxJumpableGap() {
         const jumpTime = (2 * this.dino.jumpPower) / this.gravity;
         const maxDistance = this.gameSpeed * jumpTime;
-        return maxDistance * 0.8;
+        
+
+        if (this.gameSpeed <= 5) {
+            return Math.min(30, maxDistance * 0.5); 
+        } else if (this.gameSpeed <= 7) {
+            return Math.min(50, maxDistance * 0.6); 
+        } else {
+            return maxDistance * 0.8; 
+        }
     }
     
     initializeBuildings() {
-        // Create initial buildings to cover the screen
+       
         let currentX = 0;
         while (currentX < this.canvas.width + 200) {
             const building = this.createBuilding(currentX);
@@ -95,12 +103,12 @@ class DinoGame {
         const minWidth = 60;
         const maxWidth = 150;
         
-        // Sometimes create a gap (no building)
+
         const shouldCreateGap = Math.random() < 0.3 && startX > 200;
         
         if (shouldCreateGap) {
             const maxGap = this.getMaxJumpableGap();
-            const minGap = Math.min(30, maxGap * 0.4);
+            const minGap = Math.min(20, maxGap * 0.4);
             const gapWidth = minGap + Math.random() * (maxGap - minGap);
             
             return {
@@ -113,9 +121,17 @@ class DinoGame {
         } else {
             const height = minHeight + Math.random() * (maxHeight - minHeight);
             const width = minWidth + Math.random() * (maxWidth - minWidth);
+          
+            let beamChance = 0;
+            if (this.gameSpeed <= 5) {
+                beamChance = 0.02; 
+            } else if (this.gameSpeed <= 7) {
+                beamChance = 0.08; 
+            } else {
+                beamChance = 0.15; 
+            }
             
-            // Sometimes add a traction beam above this building
-            if (Math.random() < 0.15 && startX > 300) { // 15% chance after initial area
+            if (Math.random() < beamChance && startX > 300) {
                 this.createTractionBeam(startX, width, height);
             }
             
@@ -130,10 +146,10 @@ class DinoGame {
     }
     
     createTractionBeam(buildingX, buildingWidth, buildingHeight) {
-        const beamWidth = 20 + Math.random() * 30; // Random beam width
-        const beamX = buildingX + (buildingWidth - beamWidth) / 2; // Center on building
+        const beamWidth = 20 + Math.random() * 30; 
+        const beamX = buildingX + (buildingWidth - beamWidth) / 2; 
         const beamBottom = this.canvas.height - buildingHeight;
-        const beamHeight = this.canvas.height; // Height of the beam
+        const beamHeight = this.canvas.height;
         
         this.tractionBeams.push({
             x: beamX,
@@ -187,7 +203,7 @@ class DinoGame {
         this.gameSpeed = 4;
         this.buildingTimer = 0;
         
-        // Reset dino position
+       
         this.dino.y = 120;
         this.dino.dy = 0;
         this.dino.x = 350;
@@ -196,7 +212,7 @@ class DinoGame {
         this.dino.height = this.dino.normalHeight;
         this.dino.currentBuilding = null;
         
-        // Reset Pacman
+       
         this.pacman.x = -120;
         this.pacman.y = this.canvas.height / 2;
         this.pacman.speed = 4;
@@ -204,7 +220,7 @@ class DinoGame {
         this.pacman.isActive = true;
         this.pacman.cycleCount = 0;
         
-        // Reset buildings and beams
+        
         this.buildings = [];
         this.tractionBeams = [];
         this.lastBuildingEnd = 0;
@@ -241,19 +257,19 @@ class DinoGame {
     updatePacman() {
         if (!this.pacman.isActive) return;
         
-        // Update Pacman speed to match game speed
+
         this.pacman.speed = this.gameSpeed;
         
-        // Move Pacman forward
+   
         this.pacman.x += this.pacman.speed;
         
-        // Check if Pacman has gone off-screen to the right
+       
         if (this.pacman.x > this.canvas.width + this.pacman.size) {
-            // Reset Pacman to start from the left again
-            this.pacman.x = -this.pacman.size - 50; // Start further off-screen
+   
+            this.pacman.x = -this.pacman.size - 50; 
             this.pacman.cycleCount++;
             
-            // Optional: Change Pacman's vertical position for variety
+         
             const positions = [
                 this.canvas.height * 0.3,   // Upper position
                 this.canvas.height * 0.5,   // Middle position
@@ -262,20 +278,20 @@ class DinoGame {
             this.pacman.y = positions[this.pacman.cycleCount % positions.length];
         }
         
-        // Animate mouth
+        
         this.pacman.mouthPhase += 0.2;
         
-        // Add slight vertical bobbing effect
+
         const baseY = this.pacman.y;
         this.pacman.y = baseY + Math.sin(this.pacman.mouthPhase * 0.5) * 10;
     }
     
     updateDino() {
-        // Apply gravity
+
         this.dino.dy += this.gravity;
         this.dino.y += this.dino.dy;
         
-        // Find current building under dino
+  
         this.dino.currentBuilding = null;
         for (let building of this.buildings) {
             if (!building.isGap &&
@@ -286,7 +302,7 @@ class DinoGame {
             }
         }
         
-        // Ground collision with buildings
+    
         if (this.dino.currentBuilding) {
             const buildingTop = this.dino.currentBuilding.y;
             if (this.dino.y + this.dino.height >= buildingTop && this.dino.dy >= 0) {
@@ -295,9 +311,9 @@ class DinoGame {
                 this.dino.grounded = true;
             }
         } else {
-            // No building under dino - falling!
+            
             this.dino.grounded = false;
-            // Check if fallen below screen
+
             if (this.dino.y > this.canvas.height) {
                 this.endGame();
             }
@@ -305,18 +321,18 @@ class DinoGame {
     }
     
     updateBuildings() {
-        // Move buildings
+     
         for (let building of this.buildings) {
             building.x -= this.gameSpeed;
         }
         
-        // Move traction beams
+  
         for (let beam of this.tractionBeams) {
             beam.x -= this.gameSpeed;
-            beam.pulsePhase += 0.1; // Animate the pulsing effect
+            beam.pulsePhase += 0.1; 
         }
         
-        // Remove off-screen buildings and add score
+       
         for (let i = this.buildings.length - 1; i >= 0; i--) {
             if (this.buildings[i].x + this.buildings[i].width < 0) {
                 if (!this.buildings[i].isGap) {
@@ -328,26 +344,25 @@ class DinoGame {
             }
         }
         
-        // Remove off-screen traction beams
+
         for (let i = this.tractionBeams.length - 1; i >= 0; i--) {
             if (this.tractionBeams[i].x + this.tractionBeams[i].width < 0) {
                 this.tractionBeams.splice(i, 1);
             }
         }
         
-        // Add new buildings
+     
         const lastBuilding = this.buildings[this.buildings.length - 1];
         if (lastBuilding && lastBuilding.x + lastBuilding.width < this.canvas.width + 100) {
             const newBuilding = this.createBuilding(lastBuilding.x + lastBuilding.width);
             this.buildings.push(newBuilding);
         }
-        
-        // Increase game speed gradually
+       
         this.gameSpeed += 0.003;
     }
     
     checkCollisions() {
-        // Check collision with building walls
+      
         for (let building of this.buildings) {
             if (!building.isGap) {
                 if (this.dino.x + this.dino.width > building.x &&
@@ -364,14 +379,14 @@ class DinoGame {
             }
         }
         
-        // Check collision with traction beams
+        
         for (let beam of this.tractionBeams) {
             if (this.dino.x + this.dino.width > beam.x &&
                 this.dino.x < beam.x + beam.width &&
                 this.dino.y + this.dino.height > beam.y &&
                 this.dino.y < beam.y + beam.height) {
                 
-                // If dino is not ducking, game over
+       
                 if (!this.dino.ducking) {
                     this.endGame();
                     return;
@@ -379,7 +394,7 @@ class DinoGame {
             }
         }
         
-        // Check collision with Pacman (only when visible on screen)
+        
         if (this.pacman.isActive && this.pacman.x > -this.pacman.size && this.pacman.x < this.canvas.width) {
             const pacmanCenterX = this.pacman.x + this.pacman.size / 2;
             const pacmanCenterY = this.pacman.y + this.pacman.size / 2;
@@ -391,7 +406,7 @@ class DinoGame {
                 Math.pow(pacmanCenterY - dinoCenterY, 2)
             );
             
-            // If Pacman touches dino, game over
+
             if (distance < (this.pacman.size / 2 + Math.max(this.dino.width, this.dino.height) / 2)) {
                 this.endGame();
                 return;
@@ -406,31 +421,29 @@ class DinoGame {
         const centerY = this.pacman.y + this.pacman.size / 2;
         const radius = this.pacman.size / 2;
         
-        // Calculate mouth opening (0 to 0.8 radians)
+      
         const mouthOpenness = 0.4 + 0.4 * Math.abs(Math.sin(this.pacman.mouthPhase));
         
-        this.ctx.fillStyle = '#FFD700'; // Pacman yellow
+        this.ctx.fillStyle = '#FFD700'; 
         this.ctx.beginPath();
         
-        // Draw Pacman circle with mouth
+      
         if (mouthOpenness > 0.1) {
-            // Mouth is open
+         
             this.ctx.arc(centerX, centerY, radius, mouthOpenness, 2 * Math.PI - mouthOpenness);
             this.ctx.lineTo(centerX, centerY);
         } else {
-            // Mouth is closed (full circle)
+           
             this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         }
         
         this.ctx.fill();
         
-        // Draw eye
         this.ctx.fillStyle = '#000';
         this.ctx.beginPath();
         this.ctx.arc(centerX - radius * 0.2, centerY - radius * 0.3, radius * 0.1, 0, 2 * Math.PI);
         this.ctx.fill();
-        
-        // Add some glow effect
+
         this.ctx.shadowColor = '#FFD700';
         this.ctx.shadowBlur = 10;
         this.ctx.fillStyle = '#FFD700';
@@ -468,22 +481,21 @@ class DinoGame {
     }
     
     draw() {
-        // Clear canvas with sky color
+  
         this.ctx.fillStyle = '#000000ff';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw stars as simple white shapes
         this.ctx.fillStyle = '#ffffff';
         for (let star of this.stars) {
             this.ctx.fillRect(star.x, star.y, star.size, star.size);
         }
         
-        // Draw traction beams (behind buildings)
+    
         for (let beam of this.tractionBeams) {
             const pulseIntensity = 0.5 + 0.3 * Math.sin(beam.pulsePhase);
             this.ctx.globalAlpha = beam.opacity * pulseIntensity;
             
-            // Create gradient for beam effect
+    
             const gradient = this.ctx.createLinearGradient(beam.x, beam.y, beam.x + beam.width, beam.y);
             gradient.addColorStop(0, 'rgba(255, 255, 0, 0.2)');
             gradient.addColorStop(0.5, 'rgba(255, 255, 0, 0.8)');
@@ -492,20 +504,20 @@ class DinoGame {
             this.ctx.fillStyle = gradient;
             this.ctx.fillRect(beam.x, beam.y, beam.width, beam.height);
             
-            // Add beam edges
+       
             this.ctx.fillStyle = 'rgba(255, 255, 0, 0.9)';
             this.ctx.fillRect(beam.x, beam.y, 2, beam.height); // Left edge
             this.ctx.fillRect(beam.x + beam.width - 2, beam.y, 2, beam.height); // Right edge
         }
         this.ctx.globalAlpha = 1;
         
-        // Draw buildings
+       
         this.ctx.fillStyle = '#333';
         for (let building of this.buildings) {
             if (!building.isGap) {
                 this.ctx.fillRect(building.x, building.y, building.width, building.height);
                 
-                // Add some building details (windows)
+               
                 this.ctx.fillStyle = '#FFD700';
                 const windowRows = Math.floor(building.height / 25);
                 const windowCols = Math.floor(building.width / 20);
@@ -522,19 +534,18 @@ class DinoGame {
                 this.ctx.fillStyle = '#333';
             }
         }
-        
-        // Draw Pacman (overlaps everything)
+    
         this.drawPacman();
         
-        // Draw dino
+    
         this.ctx.fillStyle = '#fffcfcff';
         this.ctx.fillRect(this.dino.x, this.dino.y, this.dino.width, this.dino.height);
         
-        // Add simple dino details
+   
         this.ctx.fillStyle = '#000000ff';
         this.ctx.fillRect(this.dino.x + 5, this.dino.y + 5, 3, 3); // eye
         
-        // Draw start message
+      
         if (!this.gameRunning && !this.gameOver) {
             this.ctx.fillStyle = '#fff';
             this.ctx.font = 'bold 24px Arial';
@@ -545,7 +556,7 @@ class DinoGame {
             this.ctx.fillText('Press SPACE to start', this.canvas.width / 2, 105);
         }
         
-        // Draw game info
+
         if (this.gameRunning) {
             this.ctx.fillStyle = '#fff';
             this.ctx.font = '12px Arial';
@@ -570,10 +581,9 @@ class DinoGame {
     }
 }
 
-// Initialize game
 const game = new DinoGame();
 
-// Restart function for the button
+
 function restartGame() {
     game.startGame();
 }
