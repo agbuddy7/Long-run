@@ -9,6 +9,13 @@ body {
     align-items: center;
     min-height: 100vh;
 }
+h1 {
+    text-align: center;
+    color: #FFD700;
+    margin-bottom: 20px;
+    font-size: 36px;
+    text-shadow: 0 0 10px #FFD700;
+}
 
 .game-container {
     text-align: center;
