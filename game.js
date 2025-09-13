@@ -121,20 +121,21 @@ class DinoGame {
         } else {
             const height = minHeight + Math.random() * (maxHeight - minHeight);
             const width = minWidth + Math.random() * (maxWidth - minWidth);
-          
-            let beamChance = 0;
-            if (this.gameSpeed <= 5) {
-                beamChance = 0.02; 
-            } else if (this.gameSpeed <= 7) {
-                beamChance = 0.08; 
-            } else {
-                beamChance = 0.15; 
-            }
-            
-            if (Math.random() < beamChance && startX > 300) {
-                this.createTractionBeam(startX, width, height);
-            }
-            
+          if (this.score > 200) {
+    
+    let beamChance = 0;
+    if (this.gameSpeed <= 5) {
+        beamChance = 0.05; // 5% chance when beams first start
+    } else if (this.gameSpeed <= 7) {
+        beamChance = 0.10; // 10% chance mid-game
+    } else {
+        beamChance = 0.15; // 15% chance at high speed
+    }
+    
+    if (Math.random() < beamChance && startX > 300) {
+        this.createTractionBeam(startX, width, height);
+    }
+}         
             return {
                 x: startX,
                 y: this.canvas.height - height,
